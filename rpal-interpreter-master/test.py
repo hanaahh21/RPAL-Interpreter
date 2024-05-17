@@ -8,4 +8,4 @@ for file in dir :
     subprocess.run(['python', 'myrpal.py', "test_cases\\"+ file])
 
 
-# Run the called script with arguments
+
