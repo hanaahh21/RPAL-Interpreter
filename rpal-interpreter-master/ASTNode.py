@@ -15,8 +15,7 @@ class ASTNode:
 
         next_sib = root.sib
 
-        # prev_sib = root.prev
-        # next_sib = root.sib
+        
         # Using pattern matching to handle different node types
         match root.type:
             # Handle the "let" node type
@@ -33,41 +32,43 @@ class ASTNode:
                     X.sib = P
                     lambda_Node.child = X
 
-                    # P.prev = X
                     gamma_Node.sib = next_sib
 
-
                     return gamma_Node
+                
                 else:
                     root.sib = next_sib
-
                     return root
-            # Handle the "where" node type
-            case "where":
-                if root.child.sib.type== "=":
-                    P = root.child
-                    equal = P.sib
-                    X = equal.child
-                    E = X.sib
-                    lambda_Node = ASTNode("lambda")
-                    gamma_Node = ASTNode("gamma")
+                
+            # Handle the "rec" node type
+            case "rec":
+                eq = root.child
+                X = eq.child
+                E = X.sib
 
-                    gamma_Node.child = lambda_Node
-                    lambda_Node.sib = E
-                    lambda_Node.child = X
+                new_root = ASTNode("=")
+                new_root.child = X
 
-                    X.sib = P
-                    # P.prev = gamma_Node
-                    P.sib = None
+                X_copy = X.createCopy()
+                gamma = ASTNode("gamma")
+                X.sib = gamma
+                gamma.prev = X
 
-                    gamma_Node.sib = next_sib
+                
+                yStar = ASTNode("Y*")
+                gamma.child = yStar
+                lambda_ = ASTNode("lambda")
+                yStar.sib = lambda_
+                lambda_.prev = yStar
+
+                lambda_.child = X_copy
+                X_copy.sib = E
+                E.prev = X_copy
+                new_root.sib = next_sib
 
 
-                    return gamma_Node
-                else:
-                    root.sib = next_sib
-
-                    return root
+                return new_root
+                
             # Handle the "function_form" node type
             case "function_form":
            
@@ -129,8 +130,34 @@ class ASTNode:
                     return newRoot
                 else :
                     root.sib = next_sib
-
                     return root
+                
+            # Handle the "where" node type
+            case "where":
+                if root.child.sib.type== "=":
+                    P = root.child
+                    equal = P.sib
+                    X = equal.child
+                    E = X.sib
+                    lambda_Node = ASTNode("lambda")
+                    gamma_Node = ASTNode("gamma")
+
+                    gamma_Node.child = lambda_Node
+                    lambda_Node.sib = E
+                    lambda_Node.child = X
+
+                    X.sib = P
+                    P.sib = None
+
+                    gamma_Node.sib = next_sib
+
+                    return gamma_Node
+                
+                else:
+                    root.sib = next_sib
+                    return root
+                
+                    
             # Handle the "and" node type
             case "and":
                 eq = root.child
@@ -164,34 +191,9 @@ class ASTNode:
 
 
                 return newRoot
-            # Handle the "rec" node type
-            case "rec":
-                eq = root.child
-                X = eq.child
-                E = X.sib
-
-                new_root = ASTNode("=")
-                new_root.child = X
-
-                X_copy = X.createCopy()
-                gamma = ASTNode("gamma")
-                X.sib = gamma
-                gamma.prev = X
-
-                
-                yStar = ASTNode("Y*")
-                gamma.child = yStar
-                lambda_ = ASTNode("lambda")
-                yStar.sib = lambda_
-                lambda_.prev = yStar
-
-                lambda_.child = X_copy
-                X_copy.sib = E
-                E.prev = X_copy
-                new_root.sib = next_sib
-
-
-                return new_root
+            
+            
+            
             # Handle the "@" node type
             case "@":
                 E1 = root.child
@@ -228,7 +230,7 @@ class ASTNode:
         self.indentation = 0  # used for printing the tree structure
 
     def Tree(self):
-        # Recursive function to traverse the tree
+        # Recursive function to print the tree
         if self.child:
             self.child.Tree()
         if self.sib:
@@ -259,7 +261,6 @@ class ASTNode:
             file.write(".")
         # Write the node type and value if available to the file
         if self.val is not None:
-
             file.write("<"+str(self.type.split(".")[1])+":"+str(self.val)+">" + "\n")
         else :
             file.write(str(self.type) + "\n")
