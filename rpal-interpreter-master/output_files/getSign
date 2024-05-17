@@ -1,0 +1,17 @@
+let
+.=
+..<ID:sign>
+..lambda
+...<ID:X>
+...->
+....gr
+.....<ID:X>
+.....<INT:0>
+....<STRING:Positive>
+....<STRING:Negative>
+.gamma
+..<ID:Print>
+..gamma
+...<ID:sign>
+...neg
+....<INT:15>

@@ -1,0 +1,13 @@
+gamma
+.lambda
+..<ID:test>
+..gamma
+...<ID:Print>
+...gamma
+....<ID:test>
+....<INT:4>
+.lambda
+..<ID:n>
+..gamma
+...<ID:Isstring>
+...<ID:n>

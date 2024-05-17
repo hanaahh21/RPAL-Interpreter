@@ -1,0 +1,12 @@
+let
+.function_form
+..<ID:test>
+..<ID:n>
+..gamma
+...<ID:Isstring>
+...<ID:n>
+.gamma
+..<ID:Print>
+..gamma
+...<ID:test>
+...<INT:4>
