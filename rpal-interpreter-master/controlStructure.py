@@ -1,23 +1,21 @@
 
 import ASTNode
 
-
+#This class is used to represent the tau node in the control structures
 class Tau:
-    ''' This class is used to represent the tau node in the control structures.'''
     def __init__(self, n):
         self.n = n
+#This class is used to represent the beta node in the control structures.
 class Beta:
-    ''' This class is used to represent the beta node in the control structures.'''
     def __init__(self):
         pass
-
+#This class is used to represent the control structures generated from the AST.
 class CtrlStruct:
-    ''' This class is used to represent the control structures generated from the AST.'''
     def __init__(self, idx, delta):
         self.idx = idx
         self.delta = delta
+#This class is used to represent the lambda expression in the control structures.
 class LambdaExpression:
-    ''' This class is used to represent the lambda expression in the control structures.'''
     def __init__(self, envIdx, lambdaIdx, tok):
         self.envIdx = envIdx
         self.lambdaIdx = lambdaIdx
@@ -41,9 +39,8 @@ class ControlStructureGenerator:
         self.queue = []
         self.map_ctrl_structs = {}
         self.curr_delta=[]
-
+#This function is used to print the control structures generated from the AST.
     def print_ctrlStructs(self):
-        ''' This function is used to print the control structures generated from the AST.'''
         for key, ctrl_struct in self.map_ctrl_structs.items():
             print("key: " + str(key))
             for obj in ctrl_struct:
@@ -68,9 +65,8 @@ class ControlStructureGenerator:
                 else:
                     print("Neither Token nor LambdaExpression, val: " + str(obj))
             #print("next obj\n\n")
-
+#This function is used to generate the control structures from the AST. It uses pre-order traversal to generate the control structures.
     def generate_ctrlStructs(self, root):
-        ''' This function is used to generate the control structures from the AST. It uses pre-order traversal to generate the control structures.'''
         delta = []
         self.curr_delta = []
         self.preorder_traversal(root, delta)
@@ -96,11 +92,9 @@ class ControlStructureGenerator:
         return self.map_ctrl_structs
 
 
-
+#This function is used to traverse the AST in pre-order fashion and generate the control structures.
     def preorder_traversal(self, root ,delta):
-        ''' This function is used to traverse the AST in pre-order fashion and generate the control structures.'''
-
-
+        
         match root.type :
             case "lambda":
                 
