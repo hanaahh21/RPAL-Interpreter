@@ -24,16 +24,14 @@ class Environment:
         else: 
             # self.logger.info("setEnvParams: key: {} | val: {}".format(key, val.name))
             pass  # Placeholder for logging or other actions if key and val are not ASTNode instances
+        
         self.parent = parent_env  # Set the parent environment
-        # print(self.map_vars)
-        # print("setting parent of environment: {} as env: {}".format(self.idx, parent_env.idx))
 
     def get_env_index(self):
         # Return the index of the environment
         return self.idx
 
     def get_val(self, key):
-        # self.logger.info("getVal: {} | {}".format(key, key.name))
         # Get the value associated with the key in the environment
         if key in self.map_vars.keys():
             val = self.map_vars[key]  # Retrieve the value from the environment's map
