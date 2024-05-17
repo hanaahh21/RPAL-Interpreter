@@ -8,8 +8,9 @@ from controlStructure import LambdaExpression, Beta, Tau
 
 
 class CSE_Machine :
-    ress = []
+    ress = []  # Class variable to store results
     def __init__(self , ctrlStructs ,file):
+         # Initialize variables
         self.mapEnv={}
         self.curEnvIdx=0
         self.maxEnvIdx=0
@@ -17,11 +18,13 @@ class CSE_Machine :
         self.curEnvStack=[]
         self.file=file
 
+        # Create initial environment and add it to environment map and stack
         env=Environment(self.curEnvIdx)
         self.mapEnv[self.curEnvIdx]=env
         self.curEnvStack.append(env)
 
 
+         # Initialize control structures
         self.ctrlStructs = ctrlStructs
         self.stack = []
         self.ctrl = []
@@ -32,6 +35,8 @@ class CSE_Machine :
 
     def binOp(self ,op, rand1,rand2):
 
+        # Perform binary operations
+        # Extract operation type and operand values
         binop_type=op.type
         if isinstance(rand2 , ASTNode.ASTNode) and isinstance(rand1 ,ASTNode.ASTNode):
             type1=rand1.type
@@ -39,7 +44,9 @@ class CSE_Machine :
             val1=rand1.val
             val2=rand2.val
 
+        # Perform different binary operations based on operation type
         if binop_type == "+":
+            # Addition operation
             #print(val1, val2)
             res = ASTNode.ASTNode("TokenType.INT")
             res.val = str(int(val1) + int(val2))
@@ -47,6 +54,7 @@ class CSE_Machine :
             return res
 
         elif binop_type == "-":
+            # Subtraction operation
             #print(val1,val2)
             res=ASTNode.ASTNode( "TokenType.INT")
             res.val=str(int(val1) -int(val2))
@@ -54,18 +62,20 @@ class CSE_Machine :
             return res
 
         elif binop_type == "*":
+            # Multiplication operation
             #print(val1 ,val2)
             res= ASTNode.ASTNode(  "TokenType.INT" )
             res.val=str(int(val1 )* int(val2))
             #print(res.val)
             return res
         elif binop_type == "/":
-
+            # divition operation
             res=ASTNode.ASTNode("TokenType.INT")
             res.val=str(val1 // val2)
 
             return res
         elif binop_type == "**":
+            # Exponencial operation
             res = ASTNode.ASTNode("TokenType.INT")
             res.val = str( math.pow(int(val2) ,int(val1)))
             # print("*************",res.val)
@@ -277,10 +287,14 @@ class CSE_Machine :
         return None
 
     def unaryOp(self, op, rand):
+        # Perform unary operations
+        # Extract operation type and operand value
         unop_type=op.type
         type1=rand.type
         val1=rand.val
+        # Perform different unary operations based on operation type
         if unop_type == "not":
+            # Logical negation operation
             if type1 != "true" and type1 != "false":
                 print("Wrong type: true/false expected for operand: type1:", type1)
                 exit(-1)
@@ -295,6 +309,7 @@ class CSE_Machine :
 
                 return res
         if unop_type == "neg":
+            # Numerical negation operation
             if type1 != "TokenType.INT":
                 print("Wrong type: INT expected for operand: type1:", type1)
                 exit(-1)
@@ -308,25 +323,28 @@ class CSE_Machine :
 
 
     def Print(self ,obj):
+        # Method to print an object
 
         if isinstance( obj , ASTNode.ASTNode):
+            # If the object is an instance of ASTNode
             string = obj.val
             if isinstance(obj.val,str):
-
-
-
+                # If the value is a string, replace escape characters
                 if "\\n" in string:
                     string=string.replace("\\n","\n")
                 if "\\t" in string:
                     string=string.replace("\\t","\t")
 
 
+            # Print the string value
             print(string ,end="")
             # CSE_Machine.ress.append({self.file:  obj.val})
 
         if isinstance(obj ,list):
+            # If the object is a list
             print("(",end="")
             for index ,i in enumerate(obj) :
+                # Print each item in the list
                 self.Print(i)
                 if index < len(obj)-1:
                     print(",",end=" " )
@@ -339,16 +357,17 @@ class CSE_Machine :
 
 
     def execute(self):
-
+        # Method to execute the CSE Machine
         count = 0;
+        # Iterate while control stack is not empty
         while len(self.ctrl)>0:
             # print("#######")
             ctrlTop=self.ctrl[-1]
             stackTop=self.stack[-1]
 
 
-            
 
+            # If control is LambdaExpression
             if isinstance(ctrlTop, LambdaExpression):
                 #print("Control is lamda ")
                 lamda=self.ctrl.pop(-1)
@@ -825,6 +844,7 @@ class CSE_Machine :
 
             count+=1
             # print("##################",count,"#################")
+             # Break the loop if count exceeds 500
             if (count>500):
                 break
 
@@ -834,9 +854,8 @@ class CSE_Machine :
 
 
 
-
-
 class Eta :
+    # Class to represent Eta nodes
     def __init__ (self, envId,id ,tok):
         self.envId=envId
         self.id=id
